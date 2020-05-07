@@ -1,6 +1,9 @@
 # KaoPuMusic
 分享被墙挡住的音乐,程序可用来批量下载曲谱
-
+## 成系列的练习曲谱,可以根据需要自行查找
+* 哈农基本练习
+* 孩子们的拜厄
+* 
 ## 中国国内主要的曲谱网站,可手工下载
 * [虫虫钢琴谱网](http://www.gangqinpu.com/) 
 * [人人钢琴网](https://www.everyonepiano.cn/home)
