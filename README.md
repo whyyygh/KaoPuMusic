@@ -1,5 +1,4 @@
-# KaoPuMusic 
-[](./image/靠.png) [](./image/谱.png)
+# KaoPuMusic  ![](https://github.com/whyyygh/KaoPuMusic/blob/master/image/%E9%9D%A0.png) ![](https://github.com/whyyygh/KaoPuMusic/blob/master/image/%E8%B0%B1.png)
 分享被墙挡住的音乐,程序可用来批量下载曲谱
 
 * 参考[人人钢琴网的下载程序](https://github.com/VShawn/ScoreCrawler),程序有 bug 循环40次会有内存溢出报错.
