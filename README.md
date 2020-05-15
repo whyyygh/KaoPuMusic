@@ -1,5 +1,4 @@
 # KaoPuMusic  
-![](https://github.com/whyyygh/KaoPuMusic/blob/master/image/01.png) ![](https://github.com/whyyygh/KaoPuMusic/blob/master/image/02.png)
 ![](https://github.com/whyyygh/KaoPuMusic/blob/master/image/01.jpg) ![](https://github.com/whyyygh/KaoPuMusic/blob/master/image/02.jpg)
 
 * 分享被墙挡住的音乐,让小伙伴们在音乐的海洋中畅游,爬虫程序可用来批量下载曲谱
