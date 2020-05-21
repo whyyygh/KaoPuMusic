@@ -67,7 +67,7 @@ for i in range(1,11000):
     print('numeric pages:', numeric_n)
     print()
 
-    if(sheet_n>0 and numeric_n>0):
+    if(sheet_n>0 and numeric_n>0): #有的五线谱或简谱链接是空的
         try:
             sheets = []
             for i in range(1, sheet_n + 1):
