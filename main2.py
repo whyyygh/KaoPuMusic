@@ -13,91 +13,99 @@ eopn文件
 pdf五线谱和简谱
 """
 # todo 可以继续改进下载midi 文件，要录串发现链接
+start = 11583
 
-# while True:
-for i in range(1,11000):
-    # song_id = input('input id: ')
-    song_id = str(i)
-    info = requests.get('https://www.everyonepiano.com/members/eopn1.php?id=' + song_id, verify=False).text
+for i in range(1,100):
+    # while True: 9984 not id 11578
+    for i in range(start,12000):
+        # song_id = input('input id: ')
+        start = start + 1
+        song_id = str(i)
+        info = requests.get('https://www.everyonepiano.com/members/eopn1.php?id=' + song_id, verify=False).text
 
-    print(info)
-    print()
+        if info == "ID Error":
+            print(info)
+            print(start)
+            break
 
-    song_id = int(song_id)
-    info_ori = info
-    info = info.split('\n')
+        print(info)
+        print()
 
-    title = re.sub('[^a-zA-Z\-]+', '', info[3].split('=')[-1].replace(' ', '-'))
-    code = info[-2].split('=')[-1][6:].lower()
+        song_id = int(song_id)
+        info_ori = info
+        info = info.split('\n')
 
-    os.makedirs('downloads/%s' % (title.lower()), exist_ok=True)
+        title = re.sub('[^a-zA-Z\-]+', '', info[3].split('=')[-1].replace(' ', '-'))
+        code = info[-2].split('=')[-1][6:].lower()
 
-    with io.open('downloads/%s/%d.txt' % (title.lower(), song_id), 'w', encoding='utf8') as f:
-        f.write('\n'.join(info))
+        os.makedirs('downloads/%s' % (title.lower()), exist_ok=True)
 
-    print(title)
-    print(code)
-    print()
+        with io.open('downloads/%s/%d.txt' % (title.lower(), song_id), 'w', encoding='utf8') as f:
+            f.write('\n'.join(info))
 
-    # eopn midi mid
+        print(title)
+        print(code)
+        print()
 
-    url = 'https://www.everyonepiano.com/pianomusic/%03d/%07d/down/%07d-%s.eopn' % (ceil(song_id / 1000), song_id, song_id, code)
-    print(url)
-    print()
-# https://www.everyonepiano.com/midi/001/0000100/down/0000100-02dpn2.mid
+        # eopn midi mid
 
-    eopn = requests.get(url, verify=False)
+        url = 'https://www.everyonepiano.com/pianomusic/%03d/%07d/down/%07d-%s.eopn' % (ceil(song_id / 1000), song_id, song_id, code)
+        print(url)
+        print()
+    # https://www.everyonepiano.com/midi/001/0000100/down/0000100-02dpn2.mid
 
-    with open('downloads/%s/%s.eopn' % (title.lower(), title.lower()), 'wb') as f:
-        f.write(eopn.content)
+        eopn = requests.get(url, verify=False)
 
-    print("downloaded eopn successfully")
-    print()
+        with open('downloads/%s/%s.eopn' % (title.lower(), title.lower()), 'wb') as f:
+            f.write(eopn.content)
 
-    url = 'https://www.everyonepiano.com/Music-%d-%s.html' % (song_id, title)
-    print(url)
-    page = requests.get(url, verify=False)
+        print("downloaded eopn successfully")
+        print()
 
-    print('html size:', len(page.text))
+        url = 'https://www.everyonepiano.com/Music-%d-%s.html' % (song_id, title)
+        print(url)
+        page = requests.get(url, verify=False)
 
-    sheet_n = len(page.text.split('-w-s-')) - 1
-    numeric_n = len(page.text.split('-j-s-')) - 1
+        print('html size:', len(page.text))
 
-    print('sheet pages:', sheet_n)
-    print('numeric pages:', numeric_n)
-    print()
+        sheet_n = len(page.text.split('-w-s-')) - 1
+        numeric_n = len(page.text.split('-j-s-')) - 1
 
-    if(sheet_n>0 and numeric_n>0): #有的五线谱或简谱链接是空的
-        try:
-            sheets = []
-            for i in range(1, sheet_n + 1):
-                url = 'https://www.everyonepiano.com/pianomusic/%03d/%07d/%07d-w-b-%d.png' % (
-                ceil(song_id / 1000), song_id, song_id, i)
-                print(url)
-                response = requests.get(url, verify=False)
-                sheets.append(Image.open(io.BytesIO(response.content)).convert('RGB'))
-            print()
+        print('sheet pages:', sheet_n)
+        print('numeric pages:', numeric_n)
+        print()
 
-            sheets[0].save('./downloads/%s/%s-sheet.pdf' % (title.lower(), title.lower()), save_all=True,
-                           append_images=sheets[1:])
-            print('downloaded sheet music pdf succesfully')
-            print()
-        except Exception as ex:
-            print(ex)
+        if(sheet_n>0 and numeric_n>0):
+            try:
+                sheets = []
+                for i in range(1, sheet_n + 1):
+                    url = 'https://www.everyonepiano.com/pianomusic/%03d/%07d/%07d-w-b-%d.png' % (
+                    ceil(song_id / 1000), song_id, song_id, i)
+                    print(url)
+                    response = requests.get(url, verify=False)
+                    sheets.append(Image.open(io.BytesIO(response.content)).convert('RGB'))
+                print()
 
-        try:
-            numerics = []
-            for i in range(1, numeric_n + 1):
-                url = 'https://www.everyonepiano.com/pianomusic/%03d/%07d/%07d-j-b-%d.png' % (
-                ceil(song_id / 1000), song_id, song_id, i)
-                print(url)
-                response = requests.get(url, verify=False)
-                numerics.append(Image.open(io.BytesIO(response.content)).convert('RGB'))
-            print()
+                sheets[0].save('./downloads/%s/%s-sheet.pdf' % (title.lower(), title.lower()), save_all=True,
+                               append_images=sheets[1:])
+                print('downloaded sheet music pdf succesfully')
+                print()
+            except Exception as ex:
+                print(ex)
 
-            numerics[0].save('./downloads/%s/%s-jianpu.pdf' % (title.lower(), title.lower()), save_all=True,
-                             append_images=numerics[1:])
-            print('downloaded jianpu pdf succesfully')
-            print()
-        except Exception as ex:
-            print(ex)
+            try:
+                numerics = []
+                for i in range(1, numeric_n + 1):
+                    url = 'https://www.everyonepiano.com/pianomusic/%03d/%07d/%07d-j-b-%d.png' % (
+                        ceil(song_id / 1000), song_id, song_id, i)
+                    print(url)
+                    response = requests.get(url, verify=False)
+                    numerics.append(Image.open(io.BytesIO(response.content)).convert('RGB'))
+                print()
+
+                numerics[0].save('./downloads/%s/%s-jianpu.pdf' % (title.lower(), title.lower()), save_all=True,
+                                 append_images=numerics[1:])
+                print('downloaded jianpu pdf succesfully')
+                print()
+            except Exception as ex:
+                print(ex)
